@@ -12,7 +12,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Laravel\\Installer\\Console\\": "src/"
+            "Mauri870\\LaravelInstaller\\Console\\": "src/"
         }
     },
     "require": {
