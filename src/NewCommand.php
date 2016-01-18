@@ -42,9 +42,13 @@ class NewCommand extends Command
             $output
         );
 
-        $output->writeln('<info>Crafting application...</info>');
+        $output->writeln('<info>Getting laravel version...</info>');
 
         $version = $this->getVersion($input);
+
+        $output->writeln('<info>Set version <comment>'.$version.'</comment>...</info>');
+
+        $output->writeln('<info>Crafting application...</info>');
 
         $this->craftApplication($directory, $version);
 
@@ -86,7 +90,8 @@ class NewCommand extends Command
             $composer.' run-script post-root-package-install',
             $composer.' run-script post-install-cmd',
             $composer.' run-script post-create-project-cmd',
-            "php -r \"copy('.env.example', '.env');\""
+            "php -r \"copy('.env.example', '.env');\"",
+            "php artisan key:generate",
         ];
 
         $process = new Process(implode(' && ', $commands), $directory, null, null, null);
