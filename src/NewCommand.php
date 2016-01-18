@@ -24,8 +24,8 @@ class NewCommand extends Command
         $this
             ->setName('new')
             ->setDescription('Create a new Laravel application.')
-            ->addArgument('name', InputArgument::REQUIRED)
-            ->addOption('dev', null, InputOption::VALUE_NONE, 'Installs the latest "development" release');
+            ->addArgument('name', InputArgument::REQUIRED,"What your application name?")
+            ->addArgument('version', InputArgument::OPTIONAL, 'Which version you want to install?');
     }
 
     /**
@@ -46,24 +46,7 @@ class NewCommand extends Command
 
         $version = $this->getVersion($input);
 
-        $this->download($zipFile = $this->makeFilename(), $version)
-             ->extract($zipFile, $directory)
-             ->cleanUp($zipFile);
-
-        $composer = $this->findComposer();
-
-        $commands = [
-            $composer.' install --no-scripts',
-            $composer.' run-script post-root-package-install',
-            $composer.' run-script post-install-cmd',
-            $composer.' run-script post-create-project-cmd',
-        ];
-
-        $process = new Process(implode(' && ', $commands), $directory, null, null, null);
-
-        $process->run(function ($type, $line) use ($output) {
-            $output->write($line);
-        });
+        $this->craftApplication($directory, $version);
 
         $output->writeln('<comment>Application ready! Build something amazing.</comment>');
     }
@@ -81,89 +64,82 @@ class NewCommand extends Command
         }
     }
 
+
     /**
-     * Generate a random temporary filename.
+     * Craft a new application
      *
+     * @param $directory
+     * @param $version
+     * @return $this
+     */
+    protected function craftApplication($directory, $version)
+    {
+        $composer = $this->findComposer();
+
+        $installationCommand = $this->getInstallationCommand($version,$directory);
+
+        $install = new Process($installationCommand, dirname($directory),null,null,null);
+        $install->run();
+
+        $commands = [
+            $composer.' install --no-scripts',
+            $composer.' run-script post-root-package-install',
+            $composer.' run-script post-install-cmd',
+            $composer.' run-script post-create-project-cmd',
+            "php -r \"copy('.env.example', '.env');\""
+        ];
+
+        $process = new Process(implode(' && ', $commands), $directory, null, null, null);
+
+        $process->run();
+
+        return $this;
+    }
+
+
+    /**
+     * Get composer installation command
+     *
+     * @param $version
+     * @param $directory
      * @return string
      */
-    protected function makeFilename()
-    {
-        return getcwd().'/laravel_'.md5(time().uniqid()).'.zip';
-    }
+    protected function getInstallationCommand($version, $directory){
+        $composer = $this->findComposer();
 
-    /**
-     * Download the temporary Zip to the given file.
-     *
-     * @param  string  $zipFile
-     * @param  string  $version
-     * @return $this
-     */
-    protected function download($zipFile, $version = 'master')
-    {
-        switch ($version) {
-            case 'master':
-                $filename = 'latest.zip';
-                break;
-            case 'develop':
-                $filename = 'latest-develop.zip';
-                break;
+        if($version == "5.2"){
+            $version = "latest";
         }
 
-        $response = (new Client)->get('http://cabinet.laravel.com/'.$filename);
-
-        file_put_contents($zipFile, $response->getBody());
-
-        return $this;
+        switch ($version){
+            case "4.2":
+                return $composer." create-project laravel/laravel ".$directory." 4.2 --prefer-dist";
+                break;
+            case "5.0":
+                return  $composer." create-project laravel/laravel ".$directory." \"~5.0.0\" --prefer-dist";
+                break;
+            case "5.1":
+                return $composer." create-project laravel/laravel ".$directory." \"5.1.*\" --prefer-dist";
+                break;
+            case "LTS":
+                return $composer." create-project laravel/laravel ".$directory." \"5.1.*\" --prefer-dist";
+                break;
+            case "latest":
+                return $composer." create-project laravel/laravel ".$directory." --prefer-dist";
+                break;
+            default:
+        }
     }
 
     /**
-     * Extract the zip file into the given directory.
-     *
-     * @param  string  $zipFile
-     * @param  string  $directory
-     * @return $this
-     */
-    protected function extract($zipFile, $directory)
-    {
-        $archive = new ZipArchive;
-
-        $archive->open($zipFile);
-
-        $archive->extractTo($directory);
-
-        $archive->close();
-
-        return $this;
-    }
-
-    /**
-     * Clean-up the Zip file.
-     *
-     * @param  string  $zipFile
-     * @return $this
-     */
-    protected function cleanUp($zipFile)
-    {
-        @chmod($zipFile, 0777);
-
-        @unlink($zipFile);
-
-        return $this;
-    }
-
-    /**
-     * Get the version that should be downloaded.
+     * Get the version that should be installed.
      *
      * @param  \Symfony\Component\Console\Input\InputInterface  $input
      * @return string
      */
     protected function getVersion($input)
     {
-        if ($input->getOption('dev')) {
-            return 'develop';
-        }
-
-        return 'master';
+        return $input->getArgument('version');
     }
 
     /**
