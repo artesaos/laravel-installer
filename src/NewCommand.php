@@ -31,16 +31,19 @@ Craft a new laravel application based on version number
 
 Usage:
 
-<info>laravel-installer new <comment>name</comment> <comment>version</comment><env></info>
+<info>laravel-installer new <comment>name</comment> <comment>version</comment></info>
 
 You can specify a version to install or leave blank for the latest stable release
-<info>php console.php phpmaster:fibonacci 18 <env></info>
+
+Example:
+
+<info>laravel-installer new <comment>blog</comment> <comment>5.1</comment></info>
 
 You can choose one of this versions to install:
 <comment>4.2</comment>
 <comment>5.0</comment>
-<comment>5.1</comment> - <info>You can use <header>LTS</header> instead</info>
-<comment>5.2</comment> - <info>Default</info>
+<comment>5.1</comment> - <info>You can use <comment>LTS</comment> instead</info>
+<comment>5.2</comment> - <info>Default version</info>
 EOT
             );
     }
