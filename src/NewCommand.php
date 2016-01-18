@@ -50,7 +50,7 @@ class NewCommand extends Command
 
         $output->writeln('<info>Crafting application...</info>');
 
-        $this->craftApplication($directory, $version);
+        $this->craftApplication($directory, $version, $output);
 
         $output->writeln('<comment>Application ready! Build something amazing.</comment>');
     }
@@ -74,9 +74,10 @@ class NewCommand extends Command
      *
      * @param $directory
      * @param $version
+     * @param $output
      * @return $this
      */
-    protected function craftApplication($directory, $version)
+    protected function craftApplication($directory, $version, $output)
     {
         $composer = $this->findComposer();
 
@@ -93,6 +94,8 @@ class NewCommand extends Command
             "php -r \"copy('.env.example', '.env');\"",
             "php artisan key:generate",
         ];
+
+        $output->writeln('<info>Install dependencies...</info>');
 
         $process = new Process(implode(' && ', $commands), $directory, null, null, null);
 
@@ -112,7 +115,7 @@ class NewCommand extends Command
     protected function getInstallationCommand($version, $directory){
         $composer = $this->findComposer();
 
-        if($version == "5.2"){
+        if($version == "5.2" || $version == ""){
             $version = "latest";
         }
 
