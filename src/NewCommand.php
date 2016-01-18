@@ -25,7 +25,24 @@ class NewCommand extends Command
             ->setName('new')
             ->setDescription('Create a new Laravel application.')
             ->addArgument('name', InputArgument::REQUIRED,"What your application name?")
-            ->addArgument('version', InputArgument::OPTIONAL, 'Which version you want to install?');
+            ->addArgument('version', InputArgument::OPTIONAL, 'Which version you want to install?')
+            ->setHelp(<<<EOT
+Craft a new laravel application based on version number
+
+Usage:
+
+<info>laravel-installer new <comment>name</comment> <comment>version</comment><env></info>
+
+You can specify a version to install or leave blank for the latest stable release
+<info>php console.php phpmaster:fibonacci 18 <env></info>
+
+You can choose one of this versions to install:
+<comment>4.2</comment>
+<comment>5.0</comment>
+<comment>5.1</comment> - <info>You can use <header>LTS</header> instead</info>
+<comment>5.2</comment> - <info>Default</info>
+EOT
+            );
     }
 
     /**
