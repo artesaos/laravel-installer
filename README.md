@@ -1,7 +1,7 @@
 ## Laravel Installer
 
 
-I created this laravel installer as an alternative like a symfony installer, where you could choose a specific version to install.
+I create this laravel installer as an alternative like a symfony installer, where you could choose a specific version to install.
 
 
 #### Installation
