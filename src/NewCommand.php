@@ -115,10 +115,6 @@ class NewCommand extends Command
     protected function getInstallationCommand($version, $directory){
         $composer = $this->findComposer();
 
-        if($version == "5.2" || $version == ""){
-            $version = "latest";
-        }
-
         switch ($version){
             case "4.2":
                 return $composer." create-project laravel/laravel ".$directory." 4.2 --prefer-dist";
@@ -132,7 +128,7 @@ class NewCommand extends Command
             case "LTS":
                 return $composer." create-project laravel/laravel ".$directory." \"5.1.*\" --prefer-dist";
                 break;
-            case "latest":
+            case "5.2":
                 return $composer." create-project laravel/laravel ".$directory." --prefer-dist";
                 break;
             default:
@@ -147,7 +143,13 @@ class NewCommand extends Command
      */
     protected function getVersion($input)
     {
-        return $input->getArgument('version');
+        $version = $input->getArgument('version');
+
+        if($version == "5.2" || $version == ""){
+            $version = "5.2";
+        }
+
+        return $version;
     }
 
     /**
