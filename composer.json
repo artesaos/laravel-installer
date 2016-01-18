@@ -3,6 +3,7 @@
     "description": "Install laravel with any version you want.",
     "keywords": ["laravel","installer","custom","version"],
     "license": "MIT",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Mauri de Souza Nunes",
