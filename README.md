@@ -6,7 +6,7 @@ I create this laravel installer as an alternative like a symfony installer, wher
 
 #### Installation
 ```bash
-composer g require mauri870/laravel-linkedin
+composer g require mauri870/laravel-installer
 ```
 
 #### Usage
