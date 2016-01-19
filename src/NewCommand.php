@@ -149,8 +149,9 @@ EOT
             case "5.2":
                 return $composer." create-project laravel/laravel ".$directory." --prefer-dist";
                 break;
-            default:
         }
+
+        throw new RuntimeException("The version ".$version." doesn't exist!");
     }
 
     /**
