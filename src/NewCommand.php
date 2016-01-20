@@ -164,8 +164,6 @@ EOT
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
-
-        echo $process->getOutput();
     }
 
     /**
