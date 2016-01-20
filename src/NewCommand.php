@@ -2,12 +2,10 @@
 
 namespace Mauri870\LaravelInstaller\Console;
 
-use ZipArchive;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use RuntimeException;
-use GuzzleHttp\Client;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -106,6 +104,8 @@ EOT
         $install = new Process($installationCommand, dirname($directory),null,null,null);
         $install->run();
 
+        $this->getProccessOutput($install);
+
         $commands = [
             $composer.' install --no-scripts',
             $composer.' run-script post-root-package-install',
@@ -116,8 +116,10 @@ EOT
         $output->writeln('<info>Install dependencies...</info>');
 
         $process = new Process(implode(' && ', $commands), $directory, null, null, null);
-
         $process->run();
+
+        $this->getProccessOutput($process);
+
 
         return $this;
     }
@@ -152,6 +154,18 @@ EOT
         }
 
         throw new RuntimeException("The version ".$version." doesn't exist!");
+    }
+
+    /**
+     * Get the output of a Symfony Process
+     * @param Process $process
+     */
+    protected function getProccessOutput(Process $process){
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+
+        echo $process->getOutput();
     }
 
     /**
