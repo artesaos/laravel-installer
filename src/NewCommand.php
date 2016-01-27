@@ -74,20 +74,7 @@ EOT
 
         $output->writeln('<info>Install dependencies...</info>');
 
-        $composer = $this->findComposer();
-
-        $commands = [
-            $composer.' install --no-scripts',
-            $composer.' run-script post-root-package-install',
-            $composer.' run-script post-install-cmd',
-            $composer.' run-script post-create-project-cmd'
-        ];
-
-        $process = new Process(implode(' && ', $commands), $directory, null, null, null);
-
-        $process->run(function ($type, $line) use ($output) {
-            $output->write($line);
-        });
+        $this->installDependencies($directory,$output);
 
         $output->writeln('<comment>Application ready! Build something amazing.</comment>');
     }
@@ -114,7 +101,7 @@ EOT
      * @param $output
      * @return $this
      */
-    protected function craftApplication($directory, $version, $output)
+    protected function craftApplication($directory, $version, OutputInterface $output)
     {
         $composer = $this->findComposer();
 
@@ -124,6 +111,23 @@ EOT
         $install->run();
 
         return $this;
+    }
+
+    public function installDependencies($directory, OutputInterface $output)
+    {
+        $composer = $this->findComposer();
+        $commands = [
+            $composer.' install --no-scripts',
+            $composer.' run-script post-root-package-install',
+            $composer.' run-script post-install-cmd',
+            $composer.' run-script post-create-project-cmd'
+        ];
+
+        $process = new Process(implode(' && ', $commands), $directory, null, null, null);
+
+        return $process->run(function ($type, $line) use ($output) {
+                    $output->write($line);
+                });
     }
 
 
