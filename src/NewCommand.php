@@ -72,6 +72,23 @@ EOT
 
         $this->craftApplication($directory, $version, $output);
 
+        $output->writeln('<info>Install dependencies...</info>');
+
+        $composer = $this->findComposer();
+
+        $commands = [
+            $composer.' install --no-scripts',
+            $composer.' run-script post-root-package-install',
+            $composer.' run-script post-install-cmd',
+            $composer.' run-script post-create-project-cmd'
+        ];
+
+        $process = new Process(implode(' && ', $commands), $directory, null, null, null);
+
+        $process->run(function ($type, $line) use ($output) {
+            $output->write($line);
+        });
+
         $output->writeln('<comment>Application ready! Build something amazing.</comment>');
     }
 
@@ -105,19 +122,6 @@ EOT
 
         $install = new Process($installationCommand, dirname($directory),null,null,null);
         $install->run();
-
-        $commands = [
-            $composer.' install --no-scripts',
-            $composer.' run-script post-root-package-install',
-            $composer.' run-script post-install-cmd',
-            $composer.' run-script post-create-project-cmd'
-        ];
-
-        $output->writeln('<info>Install dependencies...</info>');
-
-        $process = new Process(implode(' && ', $commands), $directory, null, null, null);
-
-        $process->run();
 
         return $this;
     }
