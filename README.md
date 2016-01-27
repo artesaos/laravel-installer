@@ -1,5 +1,5 @@
 ## Laravel Installer
-[![Build Status](https://travis-ci.org/mauri870/laravel-installer.svg?branch=master)](https://travis-ci.org/mauri870/laravel-installer)[![Latest Stable Version](https://poser.pugx.org/mauri870/laravel-installer/v/stable)](https://packagist.org/packages/mauri870/laravel-installer) [![Total Downloads](https://poser.pugx.org/mauri870/laravel-installer/downloads)](https://packagist.org/packages/mauri870/mauri870/laravel-installer) [![Latest Unstable Version](https://poser.pugx.org/mauri870/laravel-installer/v/unstable)](https://packagist.org/packages/mauri870/laravel-installer) [![License](https://poser.pugx.org/mauri870/laravel-installer/license)](https://packagist.org/packages/mauri870/laravel-installer)
+[![Build Status](https://travis-ci.org/mauri870/laravel-installer.svg?branch=master)](https://travis-ci.org/mauri870/laravel-installer) [![Latest Stable Version](https://poser.pugx.org/mauri870/laravel-installer/v/stable)](https://packagist.org/packages/mauri870/laravel-installer) [![Total Downloads](https://poser.pugx.org/mauri870/laravel-installer/downloads)](https://packagist.org/packages/mauri870/mauri870/laravel-installer) [![Latest Unstable Version](https://poser.pugx.org/mauri870/laravel-installer/v/unstable)](https://packagist.org/packages/mauri870/laravel-installer) [![License](https://poser.pugx.org/mauri870/laravel-installer/license)](https://packagist.org/packages/mauri870/laravel-installer)
 
 I create this laravel installer as an alternative like a symfony installer, where you could choose a specific version to install.
 
@@ -19,7 +19,7 @@ This installer works like a default laravel installer. The difference is you can
 laravel-installer new name version
 ```
 
-Replace name for your project `name` and `version` for one of the available versions:
+Replace `name` for your project name and `version` for one of the available versions:
 
 `4.2`
 

@@ -2,12 +2,10 @@
 
 namespace Mauri870\LaravelInstaller\Console;
 
-use ZipArchive;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use RuntimeException;
-use GuzzleHttp\Client;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -24,7 +22,7 @@ class NewCommand extends Command
         $this
             ->setName('new')
             ->setDescription('Create a new Laravel application.')
-            ->addArgument('name', InputArgument::REQUIRED,"What your application name?")
+            ->addArgument('name', InputArgument::REQUIRED, "What your application name?")
             ->addArgument('version', InputArgument::OPTIONAL, 'Which version you want to install?')
             ->setHelp(<<<EOT
 Craft a new laravel application based on version number
@@ -51,14 +49,14 @@ EOT
     /**
      * Execute the command.
      *
-     * @param  InputInterface  $input
-     * @param  OutputInterface  $output
+     * @param  InputInterface $input
+     * @param  OutputInterface $output
      * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->verifyApplicationDoesntExist(
-            $directory = getcwd().'/'.$input->getArgument('name'),
+            $directory = getcwd() . '/' . $input->getArgument('name'),
             $output
         );
 
@@ -66,7 +64,7 @@ EOT
 
         $version = $this->getVersion($input);
 
-        $output->writeln('<info>Set version <comment>'.$version.'</comment>...</info>');
+        $output->writeln('<info>Set version <comment>' . $version . '</comment>...</info>');
 
         $output->writeln('<info>Crafting application...</info>');
 
@@ -74,7 +72,7 @@ EOT
 
         $output->writeln('<info>Install dependencies...</info>');
 
-        $this->installDependencies($directory,$output);
+        $this->installDependencies($directory, $output);
 
         $output->writeln('<comment>Application ready! Build something amazing.</comment>');
     }
@@ -82,7 +80,7 @@ EOT
     /**
      * Verify that the application does not already exist.
      *
-     * @param  string  $directory
+     * @param  string $directory
      * @return void
      */
     protected function verifyApplicationDoesntExist($directory, OutputInterface $output)
@@ -105,9 +103,9 @@ EOT
     {
         $composer = $this->findComposer();
 
-        $installationCommand = $this->getInstallationCommand($version,$directory);
+        $installationCommand = $this->getInstallationCommand($version, $directory);
 
-        $install = new Process($installationCommand, dirname($directory),null,null,null);
+        $install = new Process($installationCommand, dirname($directory), null, null, null);
         $install->run();
 
         return $this;
@@ -117,14 +115,13 @@ EOT
     {
         $composer = $this->findComposer();
         $commands = [
-            $composer.' install --no-scripts',
-            $composer.' run-script post-root-package-install',
-            $composer.' run-script post-install-cmd',
-            $composer.' run-script post-create-project-cmd'
+            $composer . ' install --no-scripts',
+            $composer . ' run-script post-root-package-install',
+            $composer . ' run-script post-install-cmd',
+            $composer . ' run-script post-create-project-cmd'
         ];
 
         $process = new Process(implode(' && ', $commands), $directory, null, null, null);
-
         return $process->run(function ($type, $line) use ($output) {
                     $output->write($line);
                 });
@@ -138,41 +135,53 @@ EOT
      * @param $directory
      * @return string
      */
-    protected function getInstallationCommand($version, $directory){
+    protected function getInstallationCommand($version, $directory)
+    {
         $composer = $this->findComposer();
 
-        switch ($version){
+        switch ($version) {
             case "4.2":
-                return $composer." create-project laravel/laravel ".$directory." 4.2 --prefer-dist";
+                return $composer . " create-project laravel/laravel " . $directory . " 4.2 --prefer-dist";
                 break;
             case "5.0":
-                return  $composer." create-project laravel/laravel ".$directory." \"~5.0.0\" --prefer-dist";
+                return $composer . " create-project laravel/laravel " . $directory . " \"~5.0.0\" --prefer-dist";
                 break;
             case "5.1":
-                return $composer." create-project laravel/laravel ".$directory." \"5.1.*\" --prefer-dist";
+                return $composer . " create-project laravel/laravel " . $directory . " \"5.1.*\" --prefer-dist";
                 break;
             case "LTS":
-                return $composer." create-project laravel/laravel ".$directory." \"5.1.*\" --prefer-dist";
+                return $composer . " create-project laravel/laravel " . $directory . " \"5.1.*\" --prefer-dist";
                 break;
             case "5.2":
-                return $composer." create-project laravel/laravel ".$directory." --prefer-dist";
+                return $composer . " create-project laravel/laravel " . $directory . " --prefer-dist";
                 break;
         }
 
-        throw new RuntimeException("The version ".$version." doesn't exist!");
+        throw new RuntimeException("The version " . $version . " doesn't exist!");
+    }
+
+    /**
+     * Get the output of a Symfony Process
+     * @param Process $process
+     */
+    protected function getProccessOutput(Process $process)
+    {
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
     }
 
     /**
      * Get the version that should be installed.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
+     * @param  \Symfony\Component\Console\Input\InputInterface $input
      * @return string
      */
     protected function getVersion($input)
     {
         $version = $input->getArgument('version');
 
-        if($version == "5.2" || $version == ""){
+        if ($version == "5.2" || $version == "") {
             $version = "5.2";
         }
 
@@ -186,8 +195,8 @@ EOT
      */
     protected function findComposer()
     {
-        if (file_exists(getcwd().'/composer.phar')) {
-            return '"'.PHP_BINARY.'" composer.phar';
+        if (file_exists(getcwd() . '/composer.phar')) {
+            return '"' . PHP_BINARY . '" composer.phar';
         }
 
         return 'composer';
