@@ -1,13 +1,10 @@
 #!/usr/bin/env php
 <?php
-
 if (file_exists(__DIR__.'/../../autoload.php')) {
     require __DIR__.'/../../autoload.php';
 } else {
     require __DIR__.'/vendor/autoload.php';
 }
-
-$app = new Symfony\Component\Console\Application('Laravel Custom Installer', '0.1');
+$app = new Symfony\Component\Console\Application('Laravel Custom Installer', '1.0.2');
 $app->add(new Mauri870\LaravelInstaller\Console\NewCommand);
-
 $app->run();
