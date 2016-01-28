@@ -3,7 +3,7 @@
 
 I create this laravel installer as an alternative like a symfony installer, where you could choose a specific version to install.
 
-> A version 1.1 is already being developed, it will be possible to download any release ever launched.
+> A version 1.1 is already being developed, it will be possible to download a zipped release from github. This represent a 13% increase on download time instead of composer.
 > In the future I plan integrate an lumen installer on this package
 
 
