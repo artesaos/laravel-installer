@@ -6,7 +6,7 @@
  * @license   https://opensource.org/licenses/MIT MIT License
  */
 
-namespace Mauri870\LaravelInstaller\Tests;
+namespace Artesaos\LaravelInstaller\Tests;
 
 use Mauri870\LaravelInstaller\Console\NewCommand;
 use Symfony\Component\Console\Application;

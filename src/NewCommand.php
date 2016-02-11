@@ -1,6 +1,6 @@
 <?php
 
-namespace Mauri870\LaravelInstaller\Console;
+namespace Artesaos\LaravelInstaller\Console;
 
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use RuntimeException;
