@@ -1,6 +1,6 @@
 {
-    "name": "mauri870/laravel-installer",
-    "description": "Install laravel with any version you want.",
+    "name": "artesaos/laravel-installer",
+    "description": "Install Laravel Framework with any version you want.",
     "keywords": ["laravel","installer","custom","version"],
     "license": "MIT",
     "authors": [
@@ -11,8 +11,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "Mauri870\\LaravelInstaller\\Console\\": "src/",
-            "Mauri870\\LaravelInstaller\\Tests\\": "tests/"
+            "Artesaos\\LaravelInstaller\\Console\\": "src/",
+            "Artesaos\\LaravelInstaller\\Tests\\": "tests/"
         }
     },
     "require": {
