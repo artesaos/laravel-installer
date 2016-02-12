@@ -35,3 +35,7 @@ You can use the help command for instructions:
 ```
 laravel help new
 ```
+
+#### Changelog
+
+You can view the latest changes [here](https://github.com/artesaos/laravel-installer/blob/master/CHANGELOG.md)
