@@ -29,13 +29,13 @@ Craft a new laravel application based on version number
 
 Usage:
 
-<info>laravel-installer new <comment>name</comment> <comment>version</comment></info>
+<info>laravel new <comment>name</comment> <comment>version</comment></info>
 
 You can specify a version to install or leave blank for the latest stable release
 
 Example:
 
-<info>laravel-installer new <comment>blog</comment> <comment>5.1</comment></info>
+<info>laravel new <comment>blog</comment> <comment>LTS</comment></info>
 
 You can choose one of this versions to install:
 <comment>4.2</comment>
