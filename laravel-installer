@@ -6,5 +6,5 @@ if (file_exists(__DIR__.'/../../autoload.php')) {
     require __DIR__.'/vendor/autoload.php';
 }
 $app = new Symfony\Component\Console\Application('Laravel Custom Installer', '1.0.2');
-$app->add(new Mauri870\LaravelInstaller\Console\NewCommand);
+$app->add(new Artesaos\LaravelInstaller\Console\NewCommand);
 $app->run();

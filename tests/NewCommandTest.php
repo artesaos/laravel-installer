@@ -8,7 +8,7 @@
 
 namespace Artesaos\LaravelInstaller\Tests;
 
-use Mauri870\LaravelInstaller\Console\NewCommand;
+use Artesaos\LaravelInstaller\Console\NewCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
