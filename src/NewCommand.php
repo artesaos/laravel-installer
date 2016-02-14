@@ -139,21 +139,21 @@ EOT
     {
         $composer = $this->findComposer();
 
+        $command = $composer . " create-project laravel/laravel " . $directory;
+
         switch ($version) {
             case "4.2":
-                return $composer . " create-project laravel/laravel " . $directory . " 4.2 --prefer-dist";
+                return $command . " 4.2 --prefer-dist";
                 break;
             case "5.0":
-                return $composer . " create-project laravel/laravel " . $directory . " \"~5.0.0\" --prefer-dist";
+                return $command . " \"~5.0.0\" --prefer-dist";
                 break;
             case "5.1":
-                return $composer . " create-project laravel/laravel " . $directory . " \"5.1.*\" --prefer-dist";
-                break;
             case "LTS":
-                return $composer . " create-project laravel/laravel " . $directory . " \"5.1.*\" --prefer-dist";
+                return $command . " \"5.1.*\" --prefer-dist";
                 break;
             case "5.2":
-                return $composer . " create-project laravel/laravel " . $directory . " --prefer-dist";
+                return $command . " --prefer-dist";
                 break;
         }
 
