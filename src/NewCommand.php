@@ -2,16 +2,22 @@
 
 namespace Artesaos\LaravelInstaller\Console;
 
-use Symfony\Component\Process\Exception\ProcessFailedException;
+use ZipArchive;
 use RuntimeException;
+use GuzzleHttp\Client;
+use \Exception;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class NewCommand extends Command
 {
+
+    const SERVER_URL = "https://github.com/mauri870/laravel-releases/raw/master/";
+
     /**
      * Configure the command options.
      *
@@ -55,6 +61,10 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (! class_exists('ZipArchive')) {
+            throw new RuntimeException('The Zip PHP extension is not installed. Please install it and try again.');
+        }
+
         $this->verifyApplicationDoesntExist(
             $directory = getcwd() . '/' . $input->getArgument('name'),
             $output
@@ -68,11 +78,9 @@ EOT
 
         $output->writeln('<info>Crafting application...</info>');
 
-        $this->craftApplication($directory, $version, $output);
-
-        $output->writeln('<info>Install dependencies...</info>');
-
-        $this->installDependencies($directory, $output);
+        $this->download($zipFile = $this->makeFilename(), $version)
+            ->extract($zipFile, $directory)
+            ->cleanUp($zipFile);
 
         $output->writeln('<comment>Application ready! Build something amazing.</comment>');
     }
@@ -88,76 +96,6 @@ EOT
         if (is_dir($directory)) {
             throw new RuntimeException('Application already exists!');
         }
-    }
-
-
-    /**
-     * Craft a new application
-     *
-     * @param $directory
-     * @param $version
-     * @param $output
-     * @return $this
-     */
-    protected function craftApplication($directory, $version, OutputInterface $output)
-    {
-        $composer = $this->findComposer();
-
-        $installationCommand = $this->getInstallationCommand($version, $directory);
-
-        $install = new Process($installationCommand, dirname($directory), null, null, null);
-        $install->run();
-
-        return $this;
-    }
-
-    public function installDependencies($directory, OutputInterface $output)
-    {
-        $composer = $this->findComposer();
-        $commands = [
-            $composer . ' install --no-scripts',
-            $composer . ' run-script post-root-package-install',
-            $composer . ' run-script post-install-cmd',
-            $composer . ' run-script post-create-project-cmd'
-        ];
-
-        $process = new Process(implode(' && ', $commands), $directory, null, null, null);
-        return $process->run(function ($type, $line) use ($output) {
-                    $output->write($line);
-                });
-    }
-
-
-    /**
-     * Get composer installation command
-     *
-     * @param $version
-     * @param $directory
-     * @return string
-     */
-    protected function getInstallationCommand($version, $directory)
-    {
-        $composer = $this->findComposer();
-
-        $command = $composer . " create-project laravel/laravel " . $directory;
-
-        switch ($version) {
-            case "4.2":
-                return $command . " 4.2 --prefer-dist";
-                break;
-            case "5.0":
-                return $command . " \"~5.0.0\" --prefer-dist";
-                break;
-            case "5.1":
-            case "LTS":
-                return $command . " \"5.1.*\" --prefer-dist";
-                break;
-            case "5.2":
-                return $command . " --prefer-dist";
-                break;
-        }
-
-        throw new RuntimeException("The version " . $version . " doesn't exist!");
     }
 
     /**
@@ -181,11 +119,93 @@ EOT
     {
         $version = $input->getArgument('version');
 
-        if ($version == "5.2" || $version == "") {
-            $version = "5.2";
+        switch($version) {
+            case "":
+                $version = "5.2";
+                break;
+            case "LTS":
+                $version = "5.1";
+                break;
+        }
+
+        $available_versions = ['4.2','5.0','5.1','5.2'];
+
+        if(!in_array($version, $available_versions)){
+            throw new RuntimeException("The version you are trying to download is not available!");
         }
 
         return $version;
+    }
+
+    /**
+     * Generate a random temporary filename.
+     *
+     * @return string
+     */
+    protected function makeFilename()
+    {
+        return getcwd().'/laravel_'.md5(time().uniqid()).'.zip';
+    }
+
+
+    /**
+     * Download the temporary Zip to the given file.
+     *
+     * @param $zipFile
+     * @param $version
+     * @return $this
+     * @throws \Exception
+     */
+    protected function download($zipFile, $version)
+    {
+        try{
+            $response = (new Client)->get(self::SERVER_URL.$version.".zip");
+        } catch(\Exception $e){
+            $e->getMessage();
+        }
+
+        if(empty($response)){
+            throw new RuntimeException("Sorry! The file can't be downloaded right now. Please try again later");
+        }
+
+        file_put_contents($zipFile, $response->getBody());
+
+        return $this;
+    }
+
+    /**
+     * Extract the zip file into the given directory.
+     *
+     * @param  string  $zipFile
+     * @param  string  $directory
+     * @return $this
+     */
+    protected function extract($zipFile, $directory)
+    {
+        $archive = new ZipArchive;
+
+        $archive->open($zipFile);
+
+        $archive->extractTo($directory);
+
+        $archive->close();
+
+        return $this;
+    }
+
+    /**
+     * Clean-up the Zip file.
+     *
+     * @param  string  $zipFile
+     * @return $this
+     */
+    protected function cleanUp($zipFile)
+    {
+        @chmod($zipFile, 0777);
+
+        @unlink($zipFile);
+
+        return $this;
     }
 
     /**
