@@ -19,7 +19,7 @@ class NewCommandTest extends PhpUnit
 {
 
     /**
-     * Return a new instance of NewCommand
+     * Return a new instance of commandTester for the NewCommand
      */
     public function returnCommandTester()
     {
