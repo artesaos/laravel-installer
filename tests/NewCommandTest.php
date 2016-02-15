@@ -19,18 +19,27 @@ class NewCommandTest extends PhpUnit
 {
 
     /**
+     * Return a new instance of NewCommand
+     */
+    public function returnCommandTester()
+    {
+        $application = new Application();
+        $application->add(new NewCommand());
+        $command = $application->find('new');
+
+        $commandTester = new CommandTester($command);
+
+        return $commandTester;
+    }
+
+    /**
      * Test execute method
      */
     public function testExecute()
     {
-        $application = new Application();
-        $application->add(new NewCommand());
+        $commandTester = $this->returnCommandTester();
 
-        $command = $application->find('new');
-        $commandTester = new CommandTester($command);
-
-
-        $commandTester->execute(['command' => $command->getName(),'name'=>'test','version'=>'LTS']);
+        $commandTester->execute(['command' => 'new','name'=>'test','version'=>'LTS']);
 
         $this->assertRegExp('/Application ready! Build something amazing./', $commandTester->getDisplay());
     }
@@ -42,12 +51,21 @@ class NewCommandTest extends PhpUnit
      */
     public function testCheckIfApplicationExists()
     {
-        $application = new Application();
-        $application->add(new NewCommand());
+        $commandTester = $this->returnCommandTester();
 
-        $command = $application->find('new');
-        $commandTester = new CommandTester($command);
+        $commandTester->execute(['command' => 'new', 'name' => 'test', 'version' => 'LTS']);
+    }
 
-        $commandTester->execute(['command' => $command->getName(), 'name' => 'test', 'version' => 'LTS']);
+    /**
+     * Test if a RuntimeException is thrown when the wrong version is passed
+     *
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage The version you are trying to download is not available!
+     */
+    public function testCanInstallANotAvailableVersion()
+    {
+        $commandTester = $this->returnCommandTester();
+
+        $commandTester->execute(['command' => 'new', 'name' => 'test', 'version' => 'WrongVersion']);
     }
 }
