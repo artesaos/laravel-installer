@@ -66,6 +66,6 @@ class NewCommandTest extends PhpUnit
     {
         $commandTester = $this->returnCommandTester();
 
-        $commandTester->execute(['command' => 'new', 'name' => 'test', 'version' => 'WrongVersion']);
+        $commandTester->execute(['command' => 'new', 'name' => 'test2', 'version' => 'WrongVersion']);
     }
 }
