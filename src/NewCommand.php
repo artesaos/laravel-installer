@@ -2,10 +2,8 @@
 
 namespace Artesaos\LaravelInstaller\Console;
 
+use Artesaos\LaravelInstaller\Console\Traits\InteractsWithZip;
 use ZipArchive;
-use RuntimeException;
-use GuzzleHttp\Client;
-use \Exception;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -15,8 +13,9 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class NewCommand extends Command
 {
+    use InteractsWithZip;
 
-    const SERVER_URL = "https://github.com/mauri870/laravel-releases/raw/master/";
+    private $server_url = "https://github.com/mauri870/laravel-releases/raw/master/";
 
     /**
      * Configure the command options.
@@ -62,7 +61,7 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (! class_exists('ZipArchive')) {
-            throw new RuntimeException('The Zip PHP extension is not installed. Please install it and try again.');
+            throw new \RuntimeException('The Zip PHP extension is not installed. Please install it and try again.');
         }
 
         $this->verifyApplicationDoesntExist(
@@ -94,7 +93,7 @@ EOT
     protected function verifyApplicationDoesntExist($directory, OutputInterface $output)
     {
         if (is_dir($directory)) {
-            throw new RuntimeException('Application already exists!');
+            throw new \RuntimeException('Application already exists!');
         }
     }
 
@@ -131,81 +130,10 @@ EOT
         $available_versions = ['4.2','5.0','5.1','5.2'];
 
         if(!in_array($version, $available_versions)){
-            throw new RuntimeException("The version you are trying to download is not available!");
+            throw new \RuntimeException("The version you are trying to download is not available!");
         }
 
         return $version;
-    }
-
-    /**
-     * Generate a random temporary filename.
-     *
-     * @return string
-     */
-    protected function makeFilename()
-    {
-        return getcwd().'/laravel_'.md5(time().uniqid()).'.zip';
-    }
-
-
-    /**
-     * Download the temporary Zip to the given file.
-     *
-     * @param $zipFile
-     * @param $version
-     * @return $this
-     * @throws \Exception
-     */
-    protected function download($zipFile, $version)
-    {
-        try{
-            $response = (new Client)->get(self::SERVER_URL.$version.".zip");
-        } catch(\Exception $e){
-            $e->getMessage();
-        }
-
-        if(empty($response)){
-            throw new RuntimeException("Sorry! The file can't be downloaded right now. Please try again later");
-        }
-
-        file_put_contents($zipFile, $response->getBody());
-
-        return $this;
-    }
-
-    /**
-     * Extract the zip file into the given directory.
-     *
-     * @param  string  $zipFile
-     * @param  string  $directory
-     * @return $this
-     */
-    protected function extract($zipFile, $directory)
-    {
-        $archive = new ZipArchive;
-
-        $archive->open($zipFile);
-
-        $archive->extractTo($directory);
-
-        $archive->close();
-
-        return $this;
-    }
-
-    /**
-     * Clean-up the Zip file.
-     *
-     * @param  string  $zipFile
-     * @return $this
-     */
-    protected function cleanUp($zipFile)
-    {
-        @chmod($zipFile, 0777);
-
-        @unlink($zipFile);
-
-        return $this;
     }
 
     /**
