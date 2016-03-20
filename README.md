@@ -1,6 +1,8 @@
 ## Laravel Installer
 [![Build Status](https://travis-ci.org/artesaos/laravel-installer.svg?branch=master)](https://travis-ci.org/artesaos/laravel-installer) [![Latest Stable Version](https://poser.pugx.org/artesaos/laravel-installer/v/stable)](https://packagist.org/packages/artesaos/laravel-installer) [![Total Downloads](https://poser.pugx.org/artesaos/laravel-installer/downloads)](https://packagist.org/packages/artesaos/artesaos/laravel-installer) [![Latest Unstable Version](https://poser.pugx.org/artesaos/laravel-installer/v/unstable)](https://packagist.org/packages/artesaos/laravel-installer) [![License](https://poser.pugx.org/artesaos/laravel-installer/license)](https://packagist.org/packages/artesaos/laravel-installer)
 
+### Development Branch
+
 This laravel installer is an alternative like a symfony installer, where you could choose a specific version to install.
 
 > Remember to remove your old laravel installer for prevent conflicts
