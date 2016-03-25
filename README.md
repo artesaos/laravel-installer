@@ -18,7 +18,7 @@ composer g require artesaos/laravel-installer
 
 This installer works like a default laravel installer. The difference is you can choose your version.
 ```
-laravel new name version
+laravel new `name` `version`
 ```
 
 Replace `name` for your project name and `version` for one of the available versions:
