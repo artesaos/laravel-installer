@@ -36,7 +36,7 @@ trait InteractsWithZip
         try{
             $response = (new Client())->get($this->server_url.$version.".zip");
         } catch(\Exception $e){
-            $e->getMessage();
+            throw new \RuntimeException($e->getMessage());
         }
 
         if(empty($response)){
