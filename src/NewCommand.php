@@ -16,6 +16,7 @@ class NewCommand extends Command
     use InteractsWithZip;
 
     private $server_url = "https://github.com/mauri870/laravel-releases/blob/master/";
+    private $available_versions = ['4.2','5.0','5.1','5.2'];
 
     /**
      * Configure the command options.
@@ -127,9 +128,7 @@ EOT
                 break;
         }
 
-        $available_versions = ['4.2','5.0','5.1','5.2'];
-
-        if(!in_array($version, $available_versions)){
+        if(!in_array($version, $this->available_versions)){
             throw new \RuntimeException("The version you are trying to download is not available!");
         }
 
