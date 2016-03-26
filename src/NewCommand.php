@@ -15,7 +15,7 @@ class NewCommand extends Command
 {
     use InteractsWithZip;
 
-    private $server_url = "https://github.com/mauri870/laravel-releases/blob/master/";
+    private $server_url = "https://github.com/mauri870/laravel-releases/raw/master/";
     private $available_versions = ['4.2','5.0','5.1','5.2'];
 
     /**
