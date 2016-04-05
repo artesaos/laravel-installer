@@ -31,6 +31,10 @@ Replace `name` for your project name and `version` for one of the available vers
 
 `5.2` - Default version
 
+`master` - Install from the current master branch
+
+`develop` - Install the development version from the next release
+
 You can use the help command for instructions:
 ```
 laravel help new
