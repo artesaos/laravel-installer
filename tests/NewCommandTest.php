@@ -23,16 +23,14 @@ class NewCommandTest extends PhpUnit
      */
     public function testExecute()
     {
-        $application = new Application();
-        $application->add(new NewCommand());
+        $app = $this->bootApplication();
 
-        $command = $application->find('new');
+        $command = $app->find('new');
         $commandTester = new CommandTester($command);
-
-
         $commandTester->execute(['command' => $command->getName(),'name'=>'test','version'=>'LTS']);
 
         $this->assertRegExp('/Application ready! Build something amazing./', $commandTester->getDisplay());
+        $this->assertFileExists('test');
     }
 
     /**
@@ -42,12 +40,36 @@ class NewCommandTest extends PhpUnit
      */
     public function testCheckIfApplicationExists()
     {
-        $application = new Application();
-        $application->add(new NewCommand());
+        $app = $this->bootApplication();
 
-        $command = $application->find('new');
+        $command = $app->find('new');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute(['command' => $command->getName(), 'name' => 'test', 'version' => 'LTS']);
+
+        $this->assertRegExp('/Application ready! Build something amazing./', $commandTester->getDisplay());
+    }
+
+    public function testIfCanInstallFromBranch()
+    {
+        $app = $this->bootApplication();
+
+        $command = $app->find('new');
         $commandTester = new CommandTester($command);
 
-        $commandTester->execute(['command' => $command->getName(), 'name' => 'test', 'version' => 'LTS']);
+        $branches = ['master', 'develop'];
+
+        foreach ($branches as $branch){
+            $commandTester->execute(['command' => $command->getName(), 'name' => 'test-branch-'.$branch, 'version' => $branch]);
+
+            $this->assertRegExp('/Application ready! Build something amazing./', $commandTester->getDisplay());
+            $this->assertFileExists('test-branch-'.$branch);
+        }
+    }
+
+    private function bootApplication() {
+        $app = new Application();
+        $app->add(new NewCommand());
+
+        return $app;
     }
 }
