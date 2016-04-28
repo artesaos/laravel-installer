@@ -6,6 +6,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 use RuntimeException;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -24,6 +25,7 @@ class NewCommand extends Command
             ->setDescription('Create a new Laravel application.')
             ->addArgument('name', InputArgument::REQUIRED, "What your application name?")
             ->addArgument('version', InputArgument::OPTIONAL, 'Which version you want to install?')
+            ->addOption('interactive', null, InputOption::VALUE_NONE, 'Add packages dynamically to your project')
             ->setHelp(<<<EOT
 Craft a new laravel application based on version number
 
@@ -76,6 +78,10 @@ EOT
 
         $this->installDependencies($directory, $output);
 
+        if ($input->getOption('interactive')) {
+            $this->requirePackages($directory, $output);
+        }
+
         $output->writeln('<comment>Application ready! Build something amazing.</comment>');
     }
 
@@ -125,8 +131,8 @@ EOT
 
         $process = new Process(implode(' && ', $commands), $directory, null, null, null);
         return $process->run(function ($type, $line) use ($output) {
-                    $output->write($line);
-                });
+            $output->write($line);
+        });
     }
 
 
@@ -177,6 +183,19 @@ EOT
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
+    }
+
+    /**
+     * Require packages recursively
+     *
+     * @param $directory
+     * @param $output
+     */
+    public function requirePackages($directory, $output)
+    {
+        $output->writeln('<info>Require additional packages...</info>');
+        $output->writeln('<info>Press enter for skip</info>');
+        system('cd '.$directory.' && '.$this->findComposer().' require');
     }
 
     /**
