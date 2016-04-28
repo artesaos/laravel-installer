@@ -21,6 +21,8 @@ This installer works like a default laravel installer. The difference is you can
 laravel new `name` `version`
 ```
 
+The option `--interactive` is available. This will ask for packages to require on your project
+
 Replace `name` for your project name and `version` for one of the available versions:
 
 `4.2`
