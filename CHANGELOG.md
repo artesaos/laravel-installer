@@ -1,3 +1,9 @@
+## 1.2.0 (2016-04-29)
+
+Features:
+
+  - Add `--interactive` option for require packages dynamically
+
 ## 1.1.0 (2016-04-05)
 
 Features:
