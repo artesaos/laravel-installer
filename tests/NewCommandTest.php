@@ -66,6 +66,11 @@ class NewCommandTest extends PhpUnit
         }
     }
 
+    public static function tearDownAfterClass()
+    {
+        system('rm -rf test test-branch-develop test-branch-master');
+    }
+
     private function bootApplication() {
         $app = new Application();
         $app->add(new NewCommand());

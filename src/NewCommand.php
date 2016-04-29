@@ -35,6 +35,8 @@ Usage:
 
 You can specify a version to install or leave blank for the latest stable release
 
+The option <info>--interactive</info> is available. This will ask for packages to require on your project
+
 Example:
 
 <info>laravel new <comment>blog</comment> <comment>LTS</comment></info>
