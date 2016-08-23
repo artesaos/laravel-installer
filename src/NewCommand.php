@@ -45,7 +45,8 @@ You can choose one of this versions to install:
 <comment>4.2</comment>
 <comment>5.0</comment>
 <comment>5.1</comment> - <info>You can use <comment>LTS</comment> instead</info>
-<comment>5.2</comment> - <info>Default version</info>
+<comment>5.2</comment>
+<comment>5.3</comment> - <info>Default version</info>
 <comment>master</comment> - <info>Install from the current master branch</info>
 <comment>develop</comment> - <info>Install the development version from the next release</info>
 EOT
@@ -159,10 +160,13 @@ EOT
                 return $command . " \"~5.0.0\"";
                 break;
             case "5.1":
-            case "LTS":
+            case "lts":
                 return $command . " \"5.1.*\"";
                 break;
             case "5.2":
+                return $command . " \"5.2.*\"";
+                break;
+            case "5.3":
                 return $command;
                 break;
             case "develop":
@@ -210,11 +214,11 @@ EOT
     {
         $version = $input->getArgument('version');
 
-        if ($version == "5.2" || $version == "") {
-            $version = "5.2";
+        if ($version == "") {
+            $version = "5.3";
         }
 
-        return $version;
+        return strtolower($version);
     }
 
     /**
