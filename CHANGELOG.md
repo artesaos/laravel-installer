@@ -1,3 +1,14 @@
+## 1.3.0 (2016-08-24)
+
+Bugfixes:
+
+  - Accept versions with any letter case (LTS, lTs or lts for example)
+
+
+Features:
+
+  - Add support for Laravel 5.3
+
 ## 1.2.0 (2016-04-29)
 
 Features:
