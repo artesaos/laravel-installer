@@ -35,18 +35,19 @@ Usage:
 
 You can specify a version to install or leave blank for the latest stable release
 
-The option <info>--interactive</info> is available. This will ask for packages to require on your project
+The option <info>--interactive</info> is available. It will ask for packages to require on your project
 
 Example:
 
-<info>laravel new <comment>blog</comment> <comment>LTS</comment></info>
+<info>laravel new <comment>blog</comment> <comment>lts</comment></info>
 
 You can choose one of this versions to install:
 <comment>4.2</comment>
 <comment>5.0</comment>
-<comment>5.1</comment> - <info>You can use <comment>LTS</comment> instead</info>
+<comment>5.1</comment> - <info>You can use <comment>lts</comment> instead</info>
 <comment>5.2</comment>
-<comment>5.3</comment> - <info>Default version</info>
+<comment>5.3</comment>
+<comment>5.4</comment> - <info>Default version</info>
 <comment>master</comment> - <info>Install from the current master branch</info>
 <comment>develop</comment> - <info>Install the development version from the next release</info>
 EOT
@@ -167,6 +168,9 @@ EOT
                 return $command . " \"5.2.*\"";
                 break;
             case "5.3":
+                return $command . " \"5.3.*\"";
+                break;
+            case "5.4":
                 return $command;
                 break;
             case "develop":
@@ -215,7 +219,7 @@ EOT
         $version = $input->getArgument('version');
 
         if ($version == "") {
-            $version = "5.3";
+            $version = "5.4";
         }
 
         return strtolower($version);

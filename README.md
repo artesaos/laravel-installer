@@ -33,7 +33,9 @@ Replace `name` for your project name and `version` for one of the available vers
 
 `5.2`
 
-`5.3` - Default version
+`5.3`
+
+`5.4` - Default version
 
 `master` - Install from the current master branch
 
