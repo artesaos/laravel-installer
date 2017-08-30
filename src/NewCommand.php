@@ -170,7 +170,10 @@ EOT
             case "5.3":
                 return $command . " \"5.3.*\"";
                 break;
-            case "5.4":
+            case "5.3":
+                return $command . " \"5.4.*\"";
+                break;
+            case "5.5":
                 return $command;
                 break;
             case "develop":
@@ -219,7 +222,7 @@ EOT
         $version = $input->getArgument('version');
 
         if ($version == "") {
-            $version = "5.4";
+            $version = "5.5";
         }
 
         return strtolower($version);

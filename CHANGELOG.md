@@ -1,3 +1,9 @@
+## 1.5.0 (2017-08-30)
+
+Features:
+
+  - Add support for Laravel 5.5
+
 ## 1.4.0 (2017-01-24)
 
 Features:
