@@ -29,13 +29,15 @@ Replace `name` for your project name and `version` for one of the available vers
 
 `5.0`
 
-`5.1` - You can use `LTS` instead
+`5.1`
 
 `5.2`
 
 `5.3`
 
-`5.4` - Default version
+`5.4`
+
+`5.5` - Default version - You can use `LTS` instead
 
 `master` - Install from the current master branch
 
