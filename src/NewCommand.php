@@ -170,7 +170,7 @@ EOT
             case "5.3":
                 return $command . " \"5.3.*\"";
                 break;
-            case "5.3":
+            case "5.4":
                 return $command . " \"5.4.*\"";
                 break;
             case "5.5":
