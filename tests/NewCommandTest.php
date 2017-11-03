@@ -13,7 +13,7 @@ use Guzzle\Common\Exception\RuntimeException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
-use PHPUnit_Framework_TestCase as PhpUnit;
+use PHPUnit\Framework\TestCase as PhpUnit;
 
 class NewCommandTest extends PhpUnit
 {
