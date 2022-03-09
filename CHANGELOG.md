@@ -1,3 +1,8 @@
+## 1.6.0 (2022-03-09)
+
+Features:
+
+  - Allow installation of any Laravel version supported by composer, without restrictions.
 ## 1.5.0 (2017-10-11)
 
 Features:

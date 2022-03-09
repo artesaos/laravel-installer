@@ -37,19 +37,9 @@ You can specify a version to install or leave blank for the latest stable releas
 
 The option <info>--interactive</info> is available. It will ask for packages to require on your project
 
-Example:
+For example, to create a project with the latest version of laravel 8 you can run:
 
-<info>laravel new <comment>blog</comment> <comment>lts</comment></info>
-
-You can choose one of this versions to install:
-<comment>4.2</comment>
-<comment>5.0</comment>
-<comment>5.1</comment> - <info>You can use <comment>lts</comment> instead</info>
-<comment>5.2</comment>
-<comment>5.3</comment>
-<comment>5.4</comment> - <info>Default version</info>
-<comment>master</comment> - <info>Install from the current master branch</info>
-<comment>develop</comment> - <info>Install the development version from the next release</info>
+<info>laravel new <comment>blog</comment> <comment>^8.0</comment></info>
 EOT
             );
     }
@@ -72,7 +62,11 @@ EOT
 
         $version = $this->getVersion($input);
 
-        $output->writeln('<info>Set version <comment>' . $version . '</comment>...</info>');
+        if ($version === '') {
+            $output->writeln('<info>Using latest version available...</info>');
+        } else {
+            $output->writeln('<info>Using version <comment>' . $version . '</comment>...</info>');
+        }
 
         $output->writeln('<info>Crafting application...</info>');
 
@@ -154,37 +148,16 @@ EOT
         $command = $composer . " create-project laravel/laravel --prefer-dist " . $directory;
 
         switch ($version) {
-            case "4.2":
-                return $command . " 4.2";
-                break;
-            case "5.0":
-                return $command . " \"~5.0.0\"";
-                break;
-            case "5.1":
-            case "lts":
-                return $command . " \"5.1.*\"";
-                break;
-            case "5.2":
-                return $command . " \"5.2.*\"";
-                break;
-            case "5.3":
-                return $command . " \"5.3.*\"";
-                break;
-            case "5.4":
-                return $command . " \"5.4.*\"";
-                break;
-            case "5.5":
-                return $command;
-                break;
             case "develop":
                 return $command . " --stability=dev \"dev-develop\"";
                 break;
             case "master":
                 return $command . " --stability=dev \"dev-master\"";
                 break;
+            default:
+                return $command . " " . $version;
+                break;
         }
-
-        throw new RuntimeException("The version " . $version . " doesn't exist!");
     }
 
     /**
@@ -220,10 +193,6 @@ EOT
     protected function getVersion($input)
     {
         $version = $input->getArgument('version');
-
-        if ($version == "") {
-            $version = "5.5";
-        }
 
         return strtolower($version);
     }

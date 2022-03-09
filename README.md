@@ -1,9 +1,9 @@
 ## Laravel Installer
 [![Build Status](https://travis-ci.org/artesaos/laravel-installer.svg?branch=master)](https://travis-ci.org/artesaos/laravel-installer) [![Latest Stable Version](https://poser.pugx.org/artesaos/laravel-installer/v/stable)](https://packagist.org/packages/artesaos/laravel-installer) [![Total Downloads](https://poser.pugx.org/artesaos/laravel-installer/downloads)](https://packagist.org/packages/artesaos/artesaos/laravel-installer) [![Latest Unstable Version](https://poser.pugx.org/artesaos/laravel-installer/v/unstable)](https://packagist.org/packages/artesaos/laravel-installer) [![License](https://poser.pugx.org/artesaos/laravel-installer/license)](https://packagist.org/packages/artesaos/laravel-installer)
 
-This laravel installer is an alternative like a symfony installer, where you could choose a specific version to install.
+This laravel installer is an alternative to the Laravel installer and much like the Symfony installer lets you choose a specific version to install.
 
-> Remember to remove your old laravel installer for prevent conflicts
+> Remember to remove your old laravel installer to prevent conflicts
 ```bash
 composer g remove laravel/installer
 ```
@@ -16,34 +16,26 @@ composer g require artesaos/laravel-installer
 
 #### Usage
 
-This installer works like a default laravel installer. The difference is you can choose your version.
+This installer works like the default laravel installer. The difference is you can choose the Laravel Version version.
 ```
 laravel new name version
 ```
 
 The option `--interactive` is available. It will ask for packages to require on your project
 
-Replace `name` for your project name and `version` for one of the available versions:
+Replace `name` for your project name and `version` with a valid laravel version, in any format supported by composer.
 
-`4.2`
+Some examples:
 
-`5.0`
-
-`5.1`
-
-`5.2`
-
-`5.3`
-
-`5.4`
-
-`5.5` - Default version - You can use `LTS` instead
-
-`master` - Install from the current master branch
-
-`develop` - Install the development version from the next release
+```bash
+laravel new blog 9.3.1
+laravel new blog ~5.5.0
+laravel new blog ^7.1
+laravel new blog master
+```
 
 You can use the help command for instructions:
+
 ```
 laravel help new
 ```
